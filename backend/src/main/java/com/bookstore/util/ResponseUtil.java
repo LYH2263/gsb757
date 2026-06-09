@@ -1,6 +1,7 @@
 package com.bookstore.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,7 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseUtil {
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd HH:mm:ss")
+            .create();
 
     public static void sendJson(HttpServletResponse response, Object data) throws IOException {
         response.setContentType("application/json");
