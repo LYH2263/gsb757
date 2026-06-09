@@ -23,6 +23,9 @@
                 <i class="fas fa-book-open"></i> 网上书店
             </a>
             <div class="d-flex gap-3">
+                <a href="orders.jsp" class="btn btn-outline-success rounded-full px-4 border-2 hover:bg-green-50 hover:border-green-600 hover:text-green-600 font-medium transition-all">
+                    <i class="fas fa-receipt me-2"></i> 我的订单
+                </a>
                 <a href="cart.jsp" class="btn btn-outline-primary rounded-full px-4 border-2 hover:bg-indigo-50 hover:border-indigo-600 hover:text-indigo-600 font-medium transition-all">
                     <i class="fas fa-shopping-cart me-2"></i> 购物车
                 </a>
