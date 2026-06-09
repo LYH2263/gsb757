@@ -1,2 +1,14 @@
 # 题目文件
 题目.md
+
+# Maven 构建产物
+backend/target/
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# 日志
+*.log

@@ -23,6 +23,9 @@
                 <i class="fas fa-book-open"></i> 网上书店
             </a>
             <div class="d-flex gap-3">
+                <a href="orders.jsp" class="btn btn-outline-success rounded-full px-4 border-2 hover:bg-green-50 hover:border-green-600 hover:text-green-600 font-medium transition-all">
+                    <i class="fas fa-box-open me-2"></i> 我的订单
+                </a>
                 <a href="cart.jsp" class="btn btn-outline-primary rounded-full px-4 border-2 hover:bg-indigo-50 hover:border-indigo-600 hover:text-indigo-600 font-medium transition-all">
                     <i class="fas fa-shopping-cart me-2"></i> 购物车
                 </a>
@@ -79,7 +82,7 @@
                                 <p class="card-text text-sm text-gray-600 mb-4 line-clamp-2 flex-grow">\${book.description}</p>
 
                                 <div class="flex items-center justify-between mt-auto pt-3 border-t">
-                                    <span class="text-xl font-bold text-indigo-600">¥\${book.price}</span>
+                                    <span class="text-xl font-bold text-indigo-600">¥\${Number(book.price).toFixed(2)}</span>
                                     <button onclick="addToCart(\${book.id})" class="btn bg-indigo-600 text-white rounded-lg px-4 py-2 hover:bg-indigo-700 hover:shadow-lg transition-all">
                                         加入 <i class="fas fa-plus ms-1 text-xs"></i>
                                     </button>

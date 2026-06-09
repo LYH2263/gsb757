@@ -26,6 +26,9 @@
                 <a href="index.jsp" class="btn btn-outline-secondary rounded-full px-4 font-medium transition-all">
                     <i class="fas fa-arrow-left me-2"></i> 继续购物
                 </a>
+                <a href="orders.jsp" class="btn btn-outline-success rounded-full px-4 border-2 hover:bg-green-50 hover:border-green-600 hover:text-green-600 font-medium transition-all">
+                    <i class="fas fa-box-open me-2"></i> 我的订单
+                </a>
             </div>
         </div>
     </nav>
@@ -111,7 +114,7 @@
                                 <span class="font-bold text-gray-800">\${item.book.title}</span>
                                 <br><span class="text-xs text-gray-400">\${item.book.author}</span>
                             </td>
-                            <td class="py-4 px-4 text-indigo-600 font-semibold">¥\${item.book.price}</td>
+                            <td class="py-4 px-4 text-indigo-600 font-semibold">¥\${Number(item.book.price).toFixed(2)}</td>
                             <td class="py-4 px-4">
                                 <span class="bg-gray-100 px-3 py-1 rounded-full text-xs font-bold">\${item.quantity}</span>
                             </td>
@@ -151,7 +154,7 @@
             })
         }
 
-        function checkout() {
+        async function checkout() {
             if (document.getElementById('cartBody').innerText.includes('您的购物车是空的')) {
                 Swal.fire({
                     icon: 'info',
@@ -161,7 +164,7 @@
                 return;
             }
 
-            Swal.fire({
+            const result = await Swal.fire({
                 title: '确认结算？',
                 text: "立即进行结算？",
                 icon: 'question',
@@ -170,12 +173,28 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: '确认购买',
                 cancelButtonText: '取消'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Direct redirect to index.jsp as requested
-                    window.location.href = 'index.jsp';
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    const res = await fetch('/api/orders', { method: 'POST' });
+                    if (res.ok) {
+                        await Swal.fire({
+                            icon: 'success',
+                            title: '下单成功！',
+                            text: '您的订单已提交成功',
+                            confirmButtonColor: '#4f46e5'
+                        });
+                        window.location.href = 'orders.jsp';
+                    } else {
+                        const data = await res.json();
+                        Swal.fire('错误', data.error || '结算失败', 'error');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    Swal.fire('错误', '网络错误，请重试', 'error');
                 }
-            })
+            }
         }
 
         loadCart();
