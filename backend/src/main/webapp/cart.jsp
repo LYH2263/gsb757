@@ -23,6 +23,9 @@
                 <i class="fas fa-book-open"></i> 网上书店
             </a>
             <div class="d-flex gap-3">
+                <a href="orders.jsp" class="btn btn-outline-success rounded-full px-4 border-2 hover:bg-green-50 hover:border-green-600 hover:text-green-600 font-medium transition-all">
+                    <i class="fas fa-receipt me-2"></i> 我的订单
+                </a>
                 <a href="index.jsp" class="btn btn-outline-secondary rounded-full px-4 font-medium transition-all">
                     <i class="fas fa-arrow-left me-2"></i> 继续购物
                 </a>
@@ -170,10 +173,29 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: '确认购买',
                 cancelButtonText: '取消'
-            }).then((result) => {
+            }).then(async (result) => {
                 if (result.isConfirmed) {
-                    // Direct redirect to index.jsp as requested
-                    window.location.href = 'index.jsp';
+                    try {
+                        const res = await fetch('/order/checkout', { method: 'POST' });
+                        if (res.ok) {
+                            const data = await res.json();
+                            Swal.fire({
+                                icon: 'success',
+                                title: '下单成功！',
+                                text: '订单号: #' + String(data.orderId).padStart(6, '0'),
+                                confirmButtonColor: '#4f46e5'
+                            }).then(() => {
+                                window.location.href = 'orders.jsp';
+                            });
+                        } else if (res.status === 401) {
+                            window.location.href = 'login.jsp';
+                        } else {
+                            const err = await res.json();
+                            Swal.fire('结算失败', err.error || '请重试', 'error');
+                        }
+                    } catch (err) {
+                        Swal.fire('错误', '网络错误，请重试', 'error');
+                    }
                 }
             })
         }
