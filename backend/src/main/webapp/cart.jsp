@@ -26,6 +26,9 @@
                 <a href="index.jsp" class="btn btn-outline-secondary rounded-full px-4 font-medium transition-all">
                     <i class="fas fa-arrow-left me-2"></i> 继续购物
                 </a>
+                <a href="orders.jsp" class="btn btn-outline-primary rounded-full px-4 border-2 hover:bg-indigo-50 hover:border-indigo-600 hover:text-indigo-600 font-medium transition-all">
+                    <i class="fas fa-receipt me-2"></i> 我的订单
+                </a>
             </div>
         </div>
     </nav>

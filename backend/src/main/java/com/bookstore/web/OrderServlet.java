@@ -3,7 +3,9 @@ package com.bookstore.web;
 import com.bookstore.dao.CartDao;
 import com.bookstore.dao.OrderDao;
 import com.bookstore.model.CartItem;
+import com.bookstore.model.Order;
 import com.bookstore.model.User;
+import com.bookstore.util.ResponseUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,6 +24,17 @@ public class OrderServlet extends HttpServlet {
     private OrderDao orderDao = new OrderDao();
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String path = req.getPathInfo();
+
+        if ("/list".equals(path)) {
+            handleList(req, resp);
+        } else {
+            resp.sendError(404);
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getPathInfo();
 
@@ -29,6 +42,23 @@ public class OrderServlet extends HttpServlet {
             handleCheckout(req, resp);
         } else {
             resp.sendError(404);
+        }
+    }
+
+    private void handleList(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            ResponseUtil.sendError(resp, 401, "Not logged in");
+            return;
+        }
+
+        User user = (User) session.getAttribute("user");
+        try {
+            List<Order> orders = orderDao.findByUserId(user.getId());
+            ResponseUtil.sendJson(resp, orders);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ResponseUtil.sendError(resp, 500, "Database error");
         }
     }
 
